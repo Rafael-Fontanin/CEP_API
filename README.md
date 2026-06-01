@@ -11,6 +11,23 @@ Ter o xampp baixado.
 Acesse : https://www.apachefriends.org/download.html caso não tenha o xampp instalado e clique Download na versão mais recente disponével para seu sistema operacional (8.2.12 / PHP 8.2.12 para Windows e Linux ou 8.2.4 / PHP 8.2.4 para MAC OS).
 
 --------------------------------------------------------------------------------------------------------
+# Estrutura de Arquivos
+
+Cep_API/
+|---Controller/
+|   |---CepAPI.php
+|
+|---Model/
+|   |---Conexao.php
+|   |---Endereco.php
+|
+|---View/
+|   |---index.html
+|   |---listagem.php
+|   |---script.js
+|
+|---banco.sql
+--------------------------------------------------------------------------------------------------------
 
 # 1. Configurar o banco de dados
 
