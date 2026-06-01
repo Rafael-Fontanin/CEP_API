@@ -13,6 +13,7 @@ Acesse : https://www.apachefriends.org/download.html caso não tenha o xampp ins
 --------------------------------------------------------------------------------------------------------
 # Estrutura de Arquivos
 
+```
 Cep_API/
 |---Controller/
 |   |---CepAPI.php
@@ -27,6 +28,9 @@ Cep_API/
 |   |---script.js
 |
 |---banco.sql
+
+```
+
 --------------------------------------------------------------------------------------------------------
 
 # 1. Configurar o banco de dados
