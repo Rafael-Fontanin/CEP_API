@@ -28,6 +28,7 @@ Cep_API/
 |   |---script.js
 |
 |---banco.sql
+|---CEP_API.zip
 
 ```
 
@@ -69,3 +70,6 @@ http://localhost/CEP_API/View/index.html
 
 --------------------------------------------------------------------------------------------------------
 
+# Bônus. Caso não funcione
+
+Caso você tenha seguido o passoi a passo do README e não tenha funcionado, copie e extraia o arquivo CEP_API.zip para seu computador e siga novamente o passo a passo. Esse arquivo é uma pasta que contém outra versão do prjeto para ser usada caso o principal não funcione devidadmente.
