@@ -63,6 +63,54 @@ async function salvarCep() {
     }
 }
 
+// ─── PUT: atualiza dados de um CEP já salvo ───────────────────────────────────
+async function atualizarCep() {
+    const cep = document.getElementById('cep').value;
+    const btn = document.getElementById('btnAtualizar');
+
+    if (!cep) { mostrarMensagem('Digite o CEP que deseja atualizar', 'erro'); return; }
+
+    const body = {
+        logradouro: document.getElementById('logradouro').value,
+        bairro:     document.getElementById('bairro').value,
+        cidade:     document.getElementById('cidade').value,
+        uf:         document.getElementById('uf').value,
+    };
+
+    // Verifica se todos os campos estão preenchidos
+    for (const [campo, valor] of Object.entries(body)) {
+        if (!valor.trim()) {
+            mostrarMensagem(`Preencha o campo: ${campo}`, 'erro');
+            return;
+        }
+    }
+
+    btn.innerText = "Atualizando...";
+    btn.disabled  = true;
+
+    try {
+        const response = await fetch(`../Controller/CepAPI.php?cep=${cep}`, {
+            method:  'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify(body),
+        });
+        const data = await response.json();
+
+        if (data.erro) {
+            mostrarMensagem(data.erro, 'erro');
+        } else {
+            preencherCampos(data.dados);
+            mostrarMensagem(data.mensagem, 'ok');
+        }
+    } catch (error) {
+        console.error("Erro na requisição:", error);
+        mostrarMensagem('Erro ao consultar o servidor.', 'erro');
+    } finally {
+        btn.innerText = "Atualizar (PUT)";
+        btn.disabled  = false;
+    }
+}
+
 // ─── DELETE: remove um CEP do banco ──────────────────────────────────────────
 async function deletarCep() {
     const cep = document.getElementById('cep').value;
