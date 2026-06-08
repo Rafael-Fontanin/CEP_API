@@ -72,6 +72,50 @@ if ($method === 'GET' && !empty($cep)) {
         echo json_encode(['erro' => 'CEP não encontrado no ViaCEP']);
     }
 
+    // ─────────────────────────────────────────────────────────────────────────────
+// PUT  /CepAPI.php?cep=XXXXXXXX
+// Body JSON: { "logradouro": "...", "bairro": "...", "cidade": "...", "uf": "..." }
+// ─────────────────────────────────────────────────────────────────────────────
+} elseif ($method === 'PUT') {
+
+    if (empty($cep)) {
+        http_response_code(400);
+        echo json_encode(['erro' => 'CEP não informado na URL']);
+        exit;
+    }
+
+    $body = json_decode(file_get_contents('php://input'), true);
+
+    // Verifica se os campos obrigatórios vieram no body
+    $campos = ['logradouro', 'bairro', 'cidade', 'uf'];
+    foreach ($campos as $campo) {
+        if (!isset($body[$campo]) || trim($body[$campo]) === '') {
+            http_response_code(400);
+            echo json_encode(['erro' => "Campo obrigatório ausente: {$campo}"]);
+            exit;
+        }
+    }
+
+    // Verifica se o CEP existe antes de tentar atualizar
+    if (!Endereco::buscar($cep)) {
+        http_response_code(404);
+        echo json_encode(['erro' => 'CEP não encontrado no banco']);
+        exit;
+    }
+
+    $ok = Endereco::atualizar($cep, $body);
+
+    if ($ok) {
+        $atualizado = Endereco::buscar($cep);
+        echo json_encode([
+            'status'   => 'ok',
+            'mensagem' => 'Endereço atualizado com sucesso',
+            'dados'    => $atualizado,
+        ]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['erro' => 'Erro ao atualizar no banco de dados']);
+    }
 // ─────────────────────────────────────────────────────────────────────────────
 // DELETE  /CepAPI.php?cep=XXXXXXXX  → remove um CEP do banco
 // ─────────────────────────────────────────────────────────────────────────────
