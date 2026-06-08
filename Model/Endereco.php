@@ -90,6 +90,32 @@ class Endereco {
         }
     }
 
+    // ─── Atualiza dados de um CEP existente (PUT) ─────────────
+    public static function atualizar(string $cep, array $dados): bool {
+        try {
+            $db  = (new Conexao())->conectar();
+            $sql = "UPDATE endereco
+                       SET logradouro = :logradouro,
+                           bairro     = :bairro,
+                           cidade     = :cidade,
+                           uf         = :uf
+                     WHERE REPLACE(cep, '-', '') = :cep";
+
+            $stmt = $db->prepare($sql);
+            $stmt->execute([
+                ':logradouro' => $dados['logradouro'],
+                ':bairro'     => $dados['bairro'],
+                ':cidade'     => $dados['cidade'],
+                ':uf'         => $dados['uf'],
+                ':cep'        => $cep,
+            ]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log("Erro ao atualizar: " . $e->getMessage());
+            return false;
+        }
+    }
+
     // ─── Remove um CEP do banco ───────────────────────────────────────────────
     public static function deletar(string $cep): bool {
         try {
